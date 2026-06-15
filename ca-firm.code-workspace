@@ -1,0 +1,74 @@
+{
+  "folders": [
+    {
+      "name": "CA Firm (Root)",
+      "path": "."
+    },
+    {
+      "name": "Backend (Node.js)",
+      "path": "backend"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.git": true
+    },
+    "tailwindCSS.experimental.classRegex": [
+      ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+      ["className\\s*=\\s*['\"`]([^'\"`]*)['\"`]"]
+    ],
+    "emmet.includeLanguages": { "javascript": "javascriptreact" },
+    "javascript.updateImportsOnFileMove.enabled": "always"
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "dsznajder.es7-react-js-snippets",
+      "cweijan.vscode-postgresql-client2",
+      "humao.rest-client"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "▶ Start Full Stack",
+        "dependsOn": ["Backend: npm run dev", "Frontend: npm run dev"],
+        "dependsOrder": "parallel",
+        "group": { "kind": "build", "isDefault": true }
+      },
+      {
+        "label": "Backend: npm run dev",
+        "type": "shell",
+        "command": "npm run dev",
+        "options": { "cwd": "${workspaceFolder:Backend (Node.js)}" },
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "label": "🟢 Backend :5000"
+        },
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "Frontend: npm run dev",
+        "type": "shell",
+        "command": "npm run dev",
+        "options": { "cwd": "${workspaceFolder:CA Firm (Root)}" },
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "label": "🔵 Frontend :5173"
+        },
+        "isBackground": true,
+        "problemMatcher": []
+      }
+    ]
+  }
+}

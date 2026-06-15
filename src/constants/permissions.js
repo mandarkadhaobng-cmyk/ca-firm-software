@@ -1,0 +1,90 @@
+export const PERMISSIONS = {
+  // Employees
+  EMPLOYEES_VIEW: 'employees.view',
+  EMPLOYEES_CREATE: 'employees.create',
+  EMPLOYEES_EDIT: 'employees.edit',
+  EMPLOYEES_DELETE: 'employees.delete',
+  // Clients
+  CLIENTS_VIEW: 'clients.view',
+  CLIENTS_CREATE: 'clients.create',
+  CLIENTS_EDIT: 'clients.edit',
+  CLIENTS_DELETE: 'clients.delete',
+  // Assignments
+  ASSIGNMENTS_VIEW: 'assignments.view',
+  ASSIGNMENTS_CREATE: 'assignments.create',
+  ASSIGNMENTS_EDIT: 'assignments.edit',
+  ASSIGNMENTS_DELETE: 'assignments.delete',
+  // Timesheets
+  TIMESHEETS_VIEW: 'timesheets.view',
+  TIMESHEETS_CREATE: 'timesheets.create',
+  TIMESHEETS_EDIT: 'timesheets.edit',
+  TIMESHEETS_APPROVE: 'timesheets.approve',
+  TIMESHEETS_VIEW_ALL: 'timesheets.view_all',
+  // Leaves
+  LEAVES_VIEW: 'leaves.view',
+  LEAVES_CREATE: 'leaves.create',
+  LEAVES_APPROVE: 'leaves.approve',
+  LEAVES_VIEW_ALL: 'leaves.view_all',
+  // Reports
+  REPORTS_VIEW: 'reports.view',
+  REPORTS_EXPORT: 'reports.export',
+  // Settings
+  SETTINGS_VIEW: 'settings.view',
+  SETTINGS_EDIT: 'settings.edit',
+  // Users
+  USERS_MANAGE: 'users.manage',
+};
+
+// Default permissions per role
+export const ROLE_DEFAULT_PERMISSIONS = {
+  super_admin: Object.values(PERMISSIONS),
+  partner: [
+    PERMISSIONS.EMPLOYEES_VIEW, PERMISSIONS.EMPLOYEES_DELETE,
+    PERMISSIONS.CLIENTS_VIEW, PERMISSIONS.CLIENTS_CREATE, PERMISSIONS.CLIENTS_EDIT, PERMISSIONS.CLIENTS_DELETE,
+    PERMISSIONS.ASSIGNMENTS_VIEW, PERMISSIONS.ASSIGNMENTS_CREATE, PERMISSIONS.ASSIGNMENTS_EDIT, PERMISSIONS.ASSIGNMENTS_DELETE,
+    PERMISSIONS.TIMESHEETS_VIEW, PERMISSIONS.TIMESHEETS_APPROVE, PERMISSIONS.TIMESHEETS_VIEW_ALL,
+    PERMISSIONS.LEAVES_VIEW_ALL, PERMISSIONS.LEAVES_APPROVE,
+    PERMISSIONS.REPORTS_VIEW, PERMISSIONS.REPORTS_EXPORT,
+    PERMISSIONS.SETTINGS_VIEW,
+  ],
+  manager: [
+    PERMISSIONS.EMPLOYEES_VIEW,
+    PERMISSIONS.CLIENTS_VIEW,
+    PERMISSIONS.ASSIGNMENTS_VIEW, PERMISSIONS.ASSIGNMENTS_CREATE, PERMISSIONS.ASSIGNMENTS_EDIT,
+    PERMISSIONS.TIMESHEETS_VIEW, PERMISSIONS.TIMESHEETS_APPROVE, PERMISSIONS.TIMESHEETS_VIEW_ALL,
+    PERMISSIONS.LEAVES_VIEW_ALL, PERMISSIONS.LEAVES_APPROVE,
+    PERMISSIONS.REPORTS_VIEW, PERMISSIONS.REPORTS_EXPORT,
+  ],
+  employee: [
+    PERMISSIONS.TIMESHEETS_VIEW, PERMISSIONS.TIMESHEETS_CREATE, PERMISSIONS.TIMESHEETS_EDIT,
+    PERMISSIONS.ASSIGNMENTS_VIEW,
+    PERMISSIONS.LEAVES_VIEW, PERMISSIONS.LEAVES_CREATE,
+    PERMISSIONS.CLIENTS_VIEW,
+  ],
+  article: [
+    PERMISSIONS.TIMESHEETS_VIEW, PERMISSIONS.TIMESHEETS_CREATE,
+    PERMISSIONS.ASSIGNMENTS_VIEW,
+    PERMISSIONS.LEAVES_VIEW, PERMISSIONS.LEAVES_CREATE,
+  ],
+  hr: [
+    PERMISSIONS.EMPLOYEES_VIEW, PERMISSIONS.EMPLOYEES_CREATE, PERMISSIONS.EMPLOYEES_EDIT, PERMISSIONS.EMPLOYEES_DELETE,
+    PERMISSIONS.LEAVES_VIEW_ALL, PERMISSIONS.LEAVES_APPROVE,
+    PERMISSIONS.REPORTS_VIEW, PERMISSIONS.REPORTS_EXPORT,
+    PERMISSIONS.SETTINGS_VIEW, PERMISSIONS.SETTINGS_EDIT,
+  ],
+};
+
+/**
+ * Check whether a given role has a specific permission.
+ * Used by authStore.hasPermission() and the usePermissions hook.
+ *
+ * @param {string} role       - Role slug e.g. 'manager'
+ * @param {string} permission - Permission key e.g. 'timesheets.approve'
+ * @returns {boolean}
+ */
+export const hasPermission = (role, permission) => {
+  if (!role || !permission) return false;
+  if (role === 'super_admin') return true;
+  const perms = ROLE_DEFAULT_PERMISSIONS[role] || [];
+  return perms.includes(permission);
+};
